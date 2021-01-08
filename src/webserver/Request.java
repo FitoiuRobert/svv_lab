@@ -1,5 +1,9 @@
 package webserver;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import validators.RequestValidator;
@@ -70,5 +74,12 @@ public class Request {
 		this.headers = headers;
 	}
 
-
+	public String prepareRequestedContent(String path) {
+		return "<html>Hello there</html>";
+		
+	}
+	
+    public String guessContentType() throws IOException {
+        return Files.probeContentType(Paths.get(this.path));
+    }
 }
