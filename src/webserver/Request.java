@@ -2,6 +2,9 @@ package webserver;
 
 import java.util.List;
 
+import validators.RequestValidator;
+import exceptions.*;
+
 public class Request {
 
 	private String method;
@@ -9,11 +12,20 @@ public class Request {
     private String version;
     private String host;
     private List<String> headers;
+    private RequestValidator requestValidator = new RequestValidator();
 
-    public Request(String method, String path, String version, String host, List<String> headers) {
-    	this.method = method;
+    public Request(String method, String path, String version, String host, List<String> headers) throws InvalidRequestMethodException, InvalidRequestVersion {
+    	if(! requestValidator.isValidMethod(method)) {
+    		throw new InvalidRequestMethodException();
+    	} else {
+    		this.method = method;
+    	}
     	this.path = path;
-    	this.version = version;
+    	if(! requestValidator.isValidVersion(version)) {
+    		throw new InvalidRequestVersion();
+    	} else {
+    		this.version = version;
+    	}
     	this.host = host;
     	this.headers = headers;
 	}

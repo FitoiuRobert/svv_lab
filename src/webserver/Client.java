@@ -12,6 +12,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.InvalidRequestMethodException;
+import exceptions.InvalidRequestVersion;
+
 
 public class Client extends Thread {
 	
@@ -42,8 +45,9 @@ public class Client extends Thread {
 	            byte[] notFoundContent = "<h1>Not found :(</h1>".getBytes();
 	            sendResponse(clientSocket, "404 Not Found", "text/html", notFoundContent);
 	        }
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	
@@ -62,7 +66,7 @@ public class Client extends Thread {
 		return requestBuilder.toString();
 	}
 
-	private Request parseRequest(String rawRequest) throws IOException {
+	private Request parseRequest(String rawRequest) throws IOException, InvalidRequestMethodException, InvalidRequestVersion {
 
         String[] requestsLines = rawRequest.split("\r\n");
         String[] requestLine = requestsLines[0].split(" ");
